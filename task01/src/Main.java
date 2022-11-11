@@ -9,3 +9,7 @@ public class Main {
         System.out.println("Hello world!");
     }
 }
+
+// https://github.com/Egornn/Java_101/blob/main/seminat5/Seminar5.java
+
+
