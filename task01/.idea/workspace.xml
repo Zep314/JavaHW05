@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="208546d0-f2f0-4123-9d0d-0784db7a18d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../task04/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/task01.iml" beforeDir="false" afterPath="$PROJECT_DIR$/task01.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../task02/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task02/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task02/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task03/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../task03/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task04/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task04/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +35,12 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true"
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/home/dima/Work/Java/dz/JavaHW05/task01/src/json-simple-1.1.1.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "configurable.group.tools"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -54,5 +64,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
