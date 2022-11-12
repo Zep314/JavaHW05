@@ -4,7 +4,6 @@
 что 1 человек может иметь несколько телефонов.
  */
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,23 +16,22 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.sql.RowSetReader;
-
-public class Main {
+public class Main {  // Почти полноценный телефонный справочник
     final static String DB_NAME = "db.json";
-    static Map<String, ArrayList> db = new HashMap<String, ArrayList>();
-    static String current = "";
+    static Map<String, ArrayList> db = new HashMap<String, ArrayList>(); // Наша база данных
+    static String current = "";  // Ключ текущей записи
     public static void main(String[] args) throws IOException, ParseException {
         Scanner scan = new Scanner(System.in);
         String inputLine = "";
         boolean ex = false;
-        Info();
-        LoadFromFile(DB_NAME);
-        while (!ex) {
+        Info();       // Информация о программе
+        LoadFromFile(DB_NAME);  // Загрузка базы
+        while (!ex) {  // главный цикл программы
             System.out.print(">>> ");
             inputLine = scan.nextLine();
             if (inputLine.length()>0) {
-                switch (inputLine.split(" ",2)[0]) {
+                switch (inputLine.split(" ",2)[0]) {  // в первой части введенной строки
+                                                                 // ждем команду
                     case "/quit" -> ex = true;
                     case "/info" -> Info();
                     case "/help" -> Help();
@@ -49,14 +47,14 @@ public class Main {
             }
         }
         System.out.println("Работа завершена.");
-        SaveToFile(DB_NAME);
+        SaveToFile(DB_NAME);  // Запись всей базы
     }
 
-    public static void Info() {
+    public static void Info() {  // Информация о программе
         System.out.println("Программа - телефонный справочник");
         System.out.println("Для помощи наберите \"/help\"");
     }
-    public static void Help() {
+    public static void Help() {  // Вывод помощи
         System.out.println("Программа - поддерживает следующие команды:");
         System.out.println("/help - вывод помощи");
         System.out.println("/info - вывод информации о программе");
@@ -69,7 +67,7 @@ public class Main {
         System.out.println("/load <file> - чтение из файла <file> в формате JSON базы данных");
     }
 
-    public static void AddRecord(String inputString) {
+    public static void AddRecord(String inputString) {  // Добавление новой записи в БД
         if (inputString.length() > 0) {
             if (!db.containsKey(inputString)) {
                 db.put(inputString, new ArrayList<String>());
@@ -77,21 +75,21 @@ public class Main {
             } else {
                 System.out.println("Запись с таким именем уже есть!");
             }
-            current = inputString;
+            current = inputString;  // Установка указателя на новую запись
         }
         else {
             System.out.println("Укажите имя абонента!\n Запись не добавлена!");
         }
     }
 
-    public static void AddPhone(String inputString) {
+    public static void AddPhone(String inputString) {  // Добавление нового телефона в текущую запись
         if (current.length() == 0) {
-            System.out.println("База данных пуста! Нек чему добавлять телефон!");
+            System.out.println("База данных пуста! Не к чему добавлять телефон!");
             System.out.println("Сначала добавьте запись в базу данных!");
         }
         else {
             if (inputString.length() > 0) {
-                ArrayList phones = db.get(current);
+                ArrayList<String> phones = db.get(current);
                 phones.add(inputString);
                 System.out.println("Номер телефона добавлен.");
             }
@@ -101,31 +99,31 @@ public class Main {
         }
     }
 
-    public static void PrintCurrent(String record) {
+    public static void PrintCurrent(String record) {  // Вывод на печать текущей записи
         if (!db.containsKey(record)) {
             System.out.println("Записи с таким именем нет!");
         }
         else {
             ArrayList<String> phones = db.get(record);
-            System.out.printf("Имя: %s%n",record);
+            System.out.printf("Имя: %s%n",record);  // Наименование записи
             if (phones.size() == 0) {
                 System.out.printf("Список телефонов у %s пуст.%n", record);
             }
             else {
-                for(String s: phones) {
+                for(String s: phones) {  // Список всех телефонов текущей записи
                     System.out.printf("\t %s%n",s);
                 }
             }
         }
     }
-    public static void PrintAll() {
+    public static void PrintAll() {  // Вывод на печать всей базы
         for(String s: db.keySet()) {
             PrintCurrent(s);
-            System.out.println();
+            System.out.println();  // Разделитель между записями
         }
     }
 
-    public static void SetRecord(String record) {
+    public static void SetRecord(String record) {  // Установка текущей записи (по ее имени)
         if (db.containsKey(record)) {
             current = record;
             System.out.printf("Текущая запись %s установлена!%n", record);
@@ -134,34 +132,32 @@ public class Main {
             System.out.printf("Записи с именем %s не существует!%n Текущей записью остается %s%n", record, current);
         }
     }
-    public static void SaveToFile(String filename) throws IOException {
+    public static void SaveToFile(String filename) throws IOException {  // формирование JSON и запись его в файл
         JSONObject jsonObj = new JSONObject();
-        for(String s: db.keySet()) {
+        for(String s: db.keySet()) {   // Проходим по всей базе и формируем JSON объект
             JSONArray jsonArr = new JSONArray();
             ArrayList<String> phones = db.get(s);
-            for (String p: phones) {
-                jsonArr.add(p);
-            }
+            jsonArr.addAll(phones);  // пишем все телефоны разом
             jsonObj.put(s,jsonArr);
         }
-        Files.write(Paths.get(filename), jsonObj.toJSONString().getBytes());
+        Files.write(Paths.get(filename), jsonObj.toJSONString().getBytes());  // пишем JSON в файл
         System.out.printf("Данные записаны в файл %s%n",filename);
     }
 
     public static void LoadFromFile(String filename) throws IOException, ParseException {
+    // Чтение базы из файла формата JSON
         if (new File(filename).exists()) {
-            FileReader reader = new FileReader(filename);
+            ClearDB(); // Очистим всю базу
+            FileReader reader = new FileReader(filename);               // Читаем файл
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObj = (JSONObject) jsonParser.parse(reader);
-            for(String s: (ArrayList<String>)jsonObj.keySet()) {
-                ArrayList<String> phones = new ArrayList<String>();
+            JSONObject jsonObj = (JSONObject) jsonParser.parse(reader); // И парсим его в JSON объект
+            for(String s: (Set<String>)jsonObj.keySet()) {              // Формируем нашу базу данных
+                ArrayList<String> phones = new ArrayList<String>();     // из JSON объекта
                 db.put(s, phones);
-                if (current.length() == 0 ) {
-                    current = s;
+                if (current.length() == 0 ) {  // указатель текущей записи устанавливаем
+                    current = s;               // на первую считанную запись
                 }
-                for(String p: (ArrayList<String>)jsonObj.get(s)) {
-                    phones.add(p);
-                }
+                phones.addAll((ArrayList<String>) jsonObj.get(s));  // устанавливаем все телефоны разом
             }
             System.out.printf("Данные прочитаны из файла %s%n", filename);
         }
@@ -169,4 +165,87 @@ public class Main {
             System.out.printf("Файл %s не найден! Загружена пустая база данных!%n", filename);
         }
     }
+
+    public static void ClearDB() {  // очищаем всю базу
+        for(String s: db.keySet()) {
+            ArrayList phones = db.get(s);
+            phones.clear();
+        }
+        db.clear();
+        current = "";
+    }
 }
+
+
+/* Вывод программы:
+Программа - телефонный справочник
+Для помощи наберите "/help"
+Данные прочитаны из файла db.json
+>>> /help
+Программа - поддерживает следующие команды:
+/help - вывод помощи
+/info - вывод информации о программе
+/printAll - печать всей базы целиком
+/printCurrent - печать текущей записи базы данных
+/addRecord <name> - добавление записи с именем <name>
+/addPhone <phoneNumber> - добавление номера телефона <phoneNumber> в текущую запись
+/setRecord <name> - установка записи <name> в качестве текущей
+/save <file> - сохранение базы в файл <file> в формате JSON
+/load <file> - чтение из файла <file> в формате JSON базы данных
+>>> /printCurrent
+Имя: Ivan
+	 123-123
+	 321-321
+>>> /printAll
+Имя: Ivan
+	 123-123
+	 321-321
+
+Имя: Marina
+	 111-222
+
+>>> /addRecord Egor
+Запись добавлена.
+>>> /addPhone 34-34-34
+Номер телефона добавлен.
+>>> /addPhone 56-56-56
+Номер телефона добавлен.
+>>> /addPhone 78-78-78
+Номер телефона добавлен.
+>>> /addRecord Olga
+Запись добавлена.
+>>> /save db.json
+Данные записаны в файл db.json
+>>> /save db_save.json
+Данные записаны в файл db_save.json
+>>> /addRecord Qwerty
+Запись добавлена.
+>>> /load db_save.json
+Данные прочитаны из файла db_save.json
+>>> /printAll
+Имя: Olga
+Список телефонов у Olga пуст.
+
+Имя: Egor
+	 34-34-34
+	 56-56-56
+	 78-78-78
+
+Имя: Ivan
+	 123-123
+	 321-321
+
+Имя: Marina
+	 111-222
+
+>>> /setRecord Egor
+Текущая запись Egor установлена!
+>>> /printCurrent
+Имя: Egor
+	 34-34-34
+	 56-56-56
+	 78-78-78
+>>> /quit
+Работа завершена.
+Данные записаны в файл db.json
+ */
